@@ -1,4 +1,5 @@
 import SideNav from '@/app/ui/dashboard/sidenav';
+import Script from 'next/script';
  
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -7,6 +8,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <SideNav />
       </div>
       <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>
+      <Script
+        src="https://browser.sentry-cdn.com/sentry-toolbar/latest/toolbar.min.js" 
+        strategy='beforeInteractive'
+      />
     </div>
   );
 }
