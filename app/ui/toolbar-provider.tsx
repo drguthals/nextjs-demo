@@ -22,9 +22,10 @@ export default function ToolbarProvider({ children }: Props) {
   const [overrides, setOverrides] = useState<FlagMap>({});
 
   const getLocalStorage = useCallback(() => {
-    try {
-      return JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY) ?? "{}");
-    } catch {}
+    const stored = localStorage.getItem(LOCALSTORAGE_KEY);
+    if (stored) {
+      return JSON.parse(stored);
+    }
   }, []);
 
   const setLocalStorage = useCallback((overrides: FlagMap) => {
