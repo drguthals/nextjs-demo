@@ -24,9 +24,7 @@ export default function ToolbarProvider({ children }: Props) {
   const getLocalStorage = useCallback(() => {
     try {
       return JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY) ?? "{}");
-    } catch {
-      return {};
-    }
+    } catch {}
   }, []);
 
   const setLocalStorage = useCallback((overrides: FlagMap) => {
@@ -54,10 +52,10 @@ export default function ToolbarProvider({ children }: Props) {
             return mockFlagsFromProvider;
           },
           getOverrides(): FlagMap {
-            return getLocalStorage();
+            return getLocalStorage() ?? mockFlagsFromProvider;
           },
           setOverride(name: string, value: FlagValue) {
-            const prev = getLocalStorage();
+            const prev = getLocalStorage() ?? mockFlagsFromProvider;
             const updated: FlagMap = { ...prev, [name]: value };
             setLocalStorage(updated);
             setOverrides(updated);
@@ -77,7 +75,7 @@ export default function ToolbarProvider({ children }: Props) {
         placement: "right-edge",
         theme: "light",
       });
-      setOverrides(getLocalStorage());
+      setOverrides(getLocalStorage() ?? mockFlagsFromProvider);
     }
   }, []);
 
