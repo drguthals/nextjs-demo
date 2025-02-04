@@ -1,21 +1,13 @@
-import { generateYAxis } from '@/app/lib/utils';
-import { CalendarIcon } from '@heroicons/react/24/outline';
-import { lusitana } from '@/app/ui/fonts';
-import { Revenue } from '@/app/lib/definitions';
+import { generateYAxis } from "@/app/lib/utils";
+import { CalendarIcon } from "@heroicons/react/24/outline";
+import { lusitana } from "@/app/ui/fonts";
+import { Revenue } from "@/app/lib/definitions";
+import * as Sentry from "@sentry/nextjs";
 
-// This component is representational only.
-// For data visualization UI, check out:
-// https://www.tremor.so/
-// https://www.chartjs.org/
-// https://airbnb.io/visx/
+function refreshError() {}
 
-export default function RevenueChart({
-  revenue,
-}: {
-  revenue: Revenue[];
-}) {
+export default function RevenueChart({ revenue }: { revenue: Revenue[] }) {
   const chartHeight = 350;
-  // NOTE: Uncomment this code in Chapter 7
 
   const { yAxisLabels, topLabel } = generateYAxis(revenue);
 
@@ -58,6 +50,14 @@ export default function RevenueChart({
         <div className="flex items-center pb-2 pt-6">
           <CalendarIcon className="h-5 w-5 text-gray-500" />
           <h3 className="ml-2 text-sm text-gray-500 ">Last 12 months</h3>
+          <button
+            className="ml-auto text-sm text-blue-500"
+            onClick={async () => {
+              Sentry.captureException(new Error("Can't refresh revenue data."));
+            }}
+          >
+            Refresh 🔄
+          </button>
         </div>
       </div>
     </div>
