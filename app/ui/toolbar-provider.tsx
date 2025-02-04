@@ -3,6 +3,7 @@
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import React from "react";
 import { FlagMap, FlagValue } from "../lib/featureFlags";
+import * as Sentry from "@sentry/nextjs";
 
 interface Props {
   children?: ReactNode;
@@ -12,6 +13,22 @@ interface Props {
 export const FFAdapterContext = React.createContext<{ overrides: FlagMap }>({
   overrides: {},
 });
+
+//debugger;
+
+const flagsIntegration =
+  Sentry.getClient()?.getIntegrationByName<Sentry.FeatureFlagsIntegration>(
+    "FeatureFlags"
+  );
+
+if (flagsIntegration) {
+  flagsIntegration.addFeatureFlag("invoices-sentry", true);
+  flagsIntegration.addFeatureFlag("revenue-sentry", true);
+} else {
+  // Something went wrong, check your DSN and/or integrations
+}
+//Sentry.captureException(new Error("Something went wrong!"));
+
 const mockFlagsFromProvider = {
   invoices: false,
   revenue: true,
